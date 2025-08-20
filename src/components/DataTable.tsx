@@ -77,7 +77,7 @@ function DataTable<T extends Record<string, any>>({ data, columns }: DataTablePr
   };
 
   return (
-    <div className="w-full max-w-full overflow-x-auto">
+    <div className="w-full max-w-full">
       <div className="mb-4">
         <input
           type="text"
@@ -87,48 +87,53 @@ function DataTable<T extends Record<string, any>>({ data, columns }: DataTablePr
           className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 transition"
         />
       </div>
-      <div className="rounded-lg shadow bg-white overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200 text-sm">
-          <thead className="bg-gray-50">
-            <tr>
-              {columns.map((column, index) => (
-                <th
-                  key={index}
-                  scope="col"
-                  className="px-4 py-3 text-left font-semibold text-gray-600 uppercase tracking-wider select-none cursor-pointer transition hover:bg-indigo-50"
-                  onClick={() => column.sortable && handleSort(column.accessor)}
-                >
-                  <div className="flex items-center gap-1">
-                    {column.header}
-                    {column.sortable && (
-                      <span className="ml-1 text-xs">
-                        {sortColumn === column.accessor && sortDirection === 'asc' && '▲'}
-                        {sortColumn === column.accessor && sortDirection === 'desc' && '▼'}
-                      </span>
-                    )}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {currentTableData.length === 0 ? (
+  
+      {/* Table wrapper with horizontal scroll */}
+      <div className="rounded-lg shadow bg-white">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 text-sm">
+            <thead className="bg-gray-50">
               <tr>
-                <td colSpan={columns.length} className="text-center py-8 text-gray-400">No data found.</td>
+                {columns.map((column, index) => (
+                  <th
+                    key={index}
+                    scope="col"
+                    className="px-4 py-3 text-left font-semibold text-gray-600 uppercase tracking-wider select-none cursor-pointer transition hover:bg-indigo-50 whitespace-nowrap"
+                    onClick={() => column.sortable && handleSort(column.accessor)}
+                  >
+                    <div className="flex items-center gap-1">
+                      {column.header}
+                      {column.sortable && (
+                        <span className="ml-1 text-xs">
+                          {sortColumn === column.accessor && sortDirection === 'asc' && '▲'}
+                          {sortColumn === column.accessor && sortDirection === 'desc' && '▼'}
+                        </span>
+                      )}
+                    </div>
+                  </th>
+                ))}
               </tr>
-            ) : (
-              currentTableData.map((row, rowIndex) => (
-                <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white hover:bg-indigo-50 transition' : 'bg-gray-50 hover:bg-indigo-50 transition'}>
-                  {columns.map((column, colIndex) => (
-                    <td key={colIndex} className="px-4 py-3 whitespace-nowrap text-gray-900">
-                      {column.render ? column.render(row) : String(row[column.accessor])}
-                    </td>
-                  ))}
+            </thead>
+            <tbody>
+              {currentTableData.length === 0 ? (
+                <tr>
+                  <td colSpan={columns.length} className="text-center py-8 text-gray-400">No data found.</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                currentTableData.map((row, rowIndex) => (
+                  <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white hover:bg-indigo-50 transition' : 'bg-gray-50 hover:bg-indigo-50 transition'}>
+                    {columns.map((column, colIndex) => (
+                      <td key={colIndex} className="px-4 py-3 whitespace-nowrap text-gray-900">
+                        {column.render ? column.render(row) : String(row[column.accessor])}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+  
         {/* Pagination */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gray-100 bg-white px-4 py-3">
           <div className="flex items-center gap-2">

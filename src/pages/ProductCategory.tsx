@@ -44,7 +44,6 @@ const ProductCategory: React.FC = () => {
     setIsEditing(true);
     setCurrentCategory(category);
     reset(category); // Prefill form
-    setFormKey(prev => prev + 1); // Change key to force remount
     setIsModalOpen(true); // Open modal
   };
 
@@ -52,8 +51,12 @@ const ProductCategory: React.FC = () => {
   const openCreateModal = () => {
     setIsEditing(false); 
     setCurrentCategory(null);
-    reset(); // Clear form
-    setFormKey(prev => prev + 1); // Change key to force remount
+    reset(
+      {
+        name : '',
+        description : '',
+      }
+    ); // Clear form
     setIsModalOpen(true);
   };
 
@@ -159,7 +162,9 @@ const ProductCategory: React.FC = () => {
         ) : categories.length === 0 ? (
           <p className="text-gray-600">No categories added yet.</p>
         ) : (
-          <DataTable data={categories} columns={categoryColumns} />
+          <div className="w-full max-w-full overflow-x-auto">
+            <DataTable data={categories} columns={categoryColumns} />
+          </div>
         )}
       </div>
     </div>

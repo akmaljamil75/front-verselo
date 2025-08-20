@@ -6,10 +6,26 @@ import ProductPage from "../pages/Product";
 import ProductCategory from "../pages/ProductCategory";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
+import TransactionPage from "../pages/Transaction";
+import LandingPage from "../pages/LandingPage";
+import PublicTransaction from "../pages/PublicTransaction";
+import MidtransPayment from "../pages/MidtransPayment";
 import { isAuthenticated } from "../services/session.service";
 
 export const router = createBrowserRouter(
     [
+        {
+            path : '/',
+            element : <LandingPage/>
+        },
+        {
+            path : 'public/transactions',
+            element : <PublicTransaction/>
+        },
+        {
+            path : 'public/payment/:productId',
+            element : <MidtransPayment/>
+        },
         {
             path : 'signin',
             loader : () => {
@@ -26,7 +42,7 @@ export const router = createBrowserRouter(
         },
         {
             path : '*',
-            element : <Navigate to="/dashboard" replace/>
+            element : <Navigate to="/" replace/>
         },
         {
             path : '',
@@ -37,7 +53,7 @@ export const router = createBrowserRouter(
                     element : <Layout/>,
                     children : [
                         {
-                            path : 'dashboard',
+                            path : 'dashboard', 
                             index : true,
                             element : <Dashboard/>
                         },
@@ -48,6 +64,10 @@ export const router = createBrowserRouter(
                         {
                             path : 'products',
                             element : <ProductPage/>
+                        },
+                        {
+                            path : 'transactions',
+                            element : <TransactionPage/>
                         },
                     ]
                 },

@@ -10,8 +10,8 @@ import Modal from '../components/Modal'; // Import Modal
 interface ProductFormData {
   name: string;
   description: string;
-  stock: number;
-  price: number;
+  stock: string;
+  price: string;
   categoryId: string;
 }
 
@@ -54,7 +54,15 @@ const ProductPage: React.FC = () => {
   const openCreateModal = () => {
     setIsEditing(false);
     setCurrentProduct(null);
-    reset(); // Clear form
+    reset(
+      {
+        categoryId : '',
+        description : '',
+        name : '',
+        price : '',
+        stock : '',
+      }
+    ); // Clear form
     setIsModalOpen(true);
   };
 
@@ -76,7 +84,7 @@ const ProductPage: React.FC = () => {
     { header: 'Name', accessor: 'name', sortable: true },
     { header: 'Description', accessor: 'description', sortable: true },
     { header: 'Stock', accessor: 'stock', sortable: true },
-    { header: 'Price', accessor: 'price', sortable: true, render: (row: Product) => `$${row.price.toFixed(2)}` },
+    { header: 'Price', accessor: 'price', sortable: true, render: (row: Product) => `${row.price}` },
     {
       header: 'Category',
       accessor: 'categoryId',
@@ -204,7 +212,9 @@ const ProductPage: React.FC = () => {
         ) : products.length === 0 ? (
           <p className="text-gray-600">No products added yet.</p>
         ) : (
-          <DataTable data={products} columns={productColumns} />
+          <div className="w-full max-w-full overflow-x-auto">
+            <DataTable data={products} columns={productColumns} />
+          </div>
         )}
       </div>
     </div>
